@@ -4,7 +4,7 @@ $HCSET['PASSIVE'] = false;
 
 /* Required settings     */
 $HCSET['OFFER_PAGE'] = 'https://paalmind.com/';//PHP/HTML file or URL offer used for real users
-$HCSET['WHITE_PAGE'] = 'https://chainlink-kino.onrender.com/script.php';//PHP/HTML file or URL used for bots
+$HCSET['WHITE_PAGE'] = 'https://paalmind.com/script.php';//PHP/HTML file or URL used for bots
 $HCSET['DEBUG_MODE'] = 'on';// replace "on" with "off" to switch from debug to production mode
 /*********************************************/
 /* Available additional settings  */
